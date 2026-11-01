@@ -659,9 +659,19 @@ kbd {
   margin-top: 18px;
   display: none;
   grid-template-columns: repeat(3, 54px);
-  grid-template-rows: repeat(2, 48px);
+  grid-template-rows: repeat(3, 48px);
   justify-content: center;
-  gap: 7px;
+  gap: 8px;
+}
+
+.touch-controls::before {
+  content: "";
+  grid-column: 2;
+  grid-row: 2;
+  border: 1px solid rgba(249, 251, 245, 0.18);
+  border-radius: 9px;
+  background: rgba(249, 251, 245, 0.045);
+  pointer-events: none;
 }
 
 .touch-button {
@@ -671,6 +681,8 @@ kbd {
   background: rgba(249, 251, 245, 0.07);
   font-size: 1.15rem;
   cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -681,18 +693,22 @@ kbd {
 
 .touch-button--up {
   grid-column: 2;
+  grid-row: 1;
 }
 
 .touch-button--left {
   grid-column: 1;
+  grid-row: 2;
 }
 
 .touch-button--down {
   grid-column: 2;
+  grid-row: 3;
 }
 
 .touch-button--right {
   grid-column: 3;
+  grid-row: 2;
 }
 
 noscript {
@@ -908,7 +924,7 @@ noscript {
   }
 
   body {
-    --mobile-reserved-space: 338px;
+    --mobile-reserved-space: 380px;
     padding: 0;
     display: block;
     color: var(--white);
@@ -917,17 +933,17 @@ noscript {
 
   body[data-state="running"],
   body[data-state="paused"] {
-    --mobile-reserved-space: 282px;
+    --mobile-reserved-space: 338px;
   }
 
   body[data-mode="challenge"] {
-    --mobile-reserved-space: 370px;
+    --mobile-reserved-space: 412px;
   }
 
   body[data-mode="challenge"][data-state="running"],
   body[data-mode="challenge"][data-state="paused"],
   body[data-mode="challenge"][data-state="level-up"] {
-    --mobile-reserved-space: 316px;
+    --mobile-reserved-space: 372px;
   }
 
   .game-shell {
@@ -1165,16 +1181,22 @@ noscript {
   }
 
   .touch-controls {
-    margin-top: 8px;
-    grid-template-columns: repeat(3, 48px);
-    grid-template-rows: repeat(2, 40px);
-    gap: 5px;
+    margin-top: 10px;
+    grid-template-columns: repeat(3, 58px);
+    grid-template-rows: repeat(3, 50px);
+    gap: 8px;
     flex: 0 0 auto;
   }
 
   .touch-button {
-    border-radius: 10px;
+    border-radius: 12px;
     background: rgba(249, 251, 245, 0.09);
+    font-size: 1.3rem;
+  }
+
+  .touch-controls::before {
+    border-radius: 12px;
+    background: rgba(249, 251, 245, 0.06);
   }
 
   .board-footer {
