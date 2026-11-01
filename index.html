@@ -25,9 +25,23 @@
           <span class="brand-name">Snake Field</span>
         </div>
 
-        <div class="run-label" aria-hidden="true">
-          <span class="signal-dot"></span>
-          Field run / 01
+        <div class="topbar-actions">
+          <button
+            class="sound-toggle"
+            id="soundButton"
+            type="button"
+            aria-pressed="true"
+            aria-label="Turn sound off"
+          >
+            <span class="sound-bars" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </span>
+            <span class="sound-label" id="soundLabel">SFX on</span>
+          </button>
+          <div class="run-label" aria-hidden="true">
+            <span class="signal-dot"></span>
+            Field run / 01
+          </div>
         </div>
       </header>
 
@@ -39,6 +53,45 @@
             <p class="intro">
               Collect every bite, fill the field, and keep your tail out of
               trouble. The pace climbs as you do.
+            </p>
+          </div>
+
+          <div class="mode-picker">
+            <div class="section-heading">
+              <span>Game mode</span>
+              <span>Choose your rules</span>
+            </div>
+            <div class="mode-options" role="group" aria-label="Game mode">
+              <button
+                class="mode-button"
+                type="button"
+                data-mode="classic"
+                aria-pressed="false"
+              >
+                <span>Classic</span>
+                <small>Edge wrap</small>
+              </button>
+              <button
+                class="mode-button is-active"
+                type="button"
+                data-mode="walled"
+                aria-pressed="true"
+              >
+                <span>Walled</span>
+                <small>Hard edges</small>
+              </button>
+              <button
+                class="mode-button"
+                type="button"
+                data-mode="challenge"
+                aria-pressed="false"
+              >
+                <span>Challenge</span>
+                <small>Obstacles</small>
+              </button>
+            </div>
+            <p class="mode-description" id="modeDescription">
+              The border ends the run. Speed increases every five bites.
             </p>
           </div>
 
@@ -56,6 +109,24 @@
               <dd id="level">01</dd>
             </div>
           </dl>
+
+          <div class="level-progress" id="levelProgress" hidden>
+            <div class="progress-copy">
+              <span id="challengeLevelName">Twin Gates</span>
+              <strong id="progressText">0 / 4 bites</strong>
+            </div>
+            <div
+              class="progress-track"
+              id="progressTrack"
+              role="progressbar"
+              aria-labelledby="challengeLevelName"
+              aria-valuemin="0"
+              aria-valuemax="4"
+              aria-valuenow="0"
+            >
+              <span class="progress-fill" id="progressFill"></span>
+            </div>
+          </div>
 
           <div class="panel-actions">
             <button class="button button--primary" id="actionButton" type="button">
@@ -79,7 +150,7 @@
         <section class="board-panel" aria-label="Snake game board">
           <div class="board-meta">
             <p><span>Status</span><strong id="statusText" aria-live="polite">Ready</strong></p>
-            <p><span>Grid</span><strong>20 × 20</strong></p>
+            <p><span>Mode</span><strong id="boardMode">Walled</strong></p>
           </div>
 
           <div class="canvas-wrap" id="canvasWrap">

@@ -28,7 +28,7 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   margin: 0;
-  padding: clamp(12px, 3vmin, 42px);
+  padding: clamp(12px, 2.5vmin, 36px);
   display: grid;
   place-items: center;
   overflow-x: hidden;
@@ -74,6 +74,69 @@ button {
 
 .brand {
   gap: 12px;
+}
+
+.topbar-actions,
+.sound-toggle,
+.sound-bars {
+  display: flex;
+  align-items: center;
+}
+
+.topbar-actions {
+  gap: 16px;
+}
+
+.sound-toggle {
+  min-height: 32px;
+  padding: 0 9px;
+  gap: 7px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.34);
+  font-family: "Courier New", monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 140ms ease, background 140ms ease;
+}
+
+.sound-toggle:hover {
+  background: var(--white);
+}
+
+.sound-toggle[aria-pressed="false"] {
+  color: var(--muted);
+}
+
+.sound-bars {
+  height: 12px;
+  gap: 2px;
+  align-items: flex-end;
+}
+
+.sound-bars span {
+  width: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.sound-bars span:nth-child(1) {
+  height: 5px;
+}
+
+.sound-bars span:nth-child(2) {
+  height: 10px;
+}
+
+.sound-bars span:nth-child(3) {
+  height: 7px;
+}
+
+.sound-toggle[aria-pressed="false"] .sound-bars span {
+  height: 2px;
 }
 
 .brand-mark {
@@ -160,6 +223,95 @@ h1 em {
   line-height: 1.65;
 }
 
+.mode-picker,
+.level-progress {
+  display: grid;
+  gap: 8px;
+}
+
+.section-heading,
+.progress-copy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: "Courier New", monospace;
+  text-transform: uppercase;
+}
+
+.section-heading {
+  color: var(--muted);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+}
+
+.section-heading span:first-child {
+  color: var(--ink);
+}
+
+.mode-options {
+  padding: 4px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.mode-button {
+  min-width: 0;
+  padding: 9px 7px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: color 140ms ease, background 140ms ease, transform 140ms ease;
+}
+
+.mode-button:hover:not(.is-active) {
+  background: rgba(21, 32, 25, 0.07);
+}
+
+.mode-button.is-active {
+  color: var(--white);
+  background: var(--ink);
+}
+
+.mode-button span,
+.mode-button small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mode-button span {
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.mode-button small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.56rem;
+  white-space: nowrap;
+}
+
+.mode-button.is-active small {
+  color: #bdc8c0;
+}
+
+.mode-description {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.68rem;
+  line-height: 1.45;
+}
+
 .scoreboard {
   margin: 0;
   display: grid;
@@ -200,6 +352,53 @@ h1 em {
   color: var(--orange);
 }
 
+.level-progress[hidden] {
+  display: none;
+}
+
+.progress-copy {
+  color: var(--muted);
+  font-size: 0.58rem;
+  letter-spacing: 0.055em;
+}
+
+.progress-copy span {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ink);
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progress-copy strong {
+  flex: 0 0 auto;
+  font-weight: 700;
+}
+
+.progress-track {
+  height: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(21, 32, 25, 0.28);
+  border-radius: 999px;
+  background: rgba(21, 32, 25, 0.11);
+}
+
+.progress-fill {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--orange), var(--acid));
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left center;
+  transition: transform 220ms ease;
+}
+
+body[data-mode="challenge"] .control-note {
+  display: none;
+}
+
 .panel-actions {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -224,6 +423,8 @@ h1 em {
 }
 
 .button:focus-visible,
+.mode-button:focus-visible,
+.sound-toggle:focus-visible,
 .touch-button:focus-visible,
 #gameCanvas:focus-visible {
   outline: 3px solid var(--orange);
@@ -500,7 +701,7 @@ noscript {
   .board-meta,
   .canvas-wrap,
   .board-footer {
-    width: min(100%, calc(100dvh - 280px));
+    width: min(100%, calc(100dvh - 290px));
   }
 }
 
@@ -551,6 +752,39 @@ noscript {
     margin-top: clamp(8px, 2vh, 14px);
     font-size: 0.78rem;
     line-height: 1.45;
+  }
+
+  .mode-picker,
+  .level-progress {
+    gap: 5px;
+  }
+
+  .section-heading,
+  .mode-description,
+  .mode-button small {
+    display: none;
+  }
+
+  .mode-options {
+    padding: 3px;
+    gap: 3px;
+  }
+
+  .mode-button {
+    padding: 6px 4px;
+    text-align: center;
+  }
+
+  .mode-button span {
+    font-size: 0.58rem;
+  }
+
+  .progress-copy {
+    font-size: 0.52rem;
+  }
+
+  .progress-track {
+    height: 7px;
   }
 
   .score-block {
@@ -715,6 +949,20 @@ noscript {
     font-size: 0.78rem;
   }
 
+  .topbar-actions {
+    gap: 8px;
+  }
+
+  .sound-toggle {
+    width: 34px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .sound-label {
+    display: none;
+  }
+
   .info-panel {
     padding-inline: 16px;
   }
@@ -726,6 +974,15 @@ noscript {
   .button {
     padding-inline: 12px;
     font-size: 0.7rem;
+  }
+
+  .mode-button {
+    padding-inline: 4px;
+    text-align: center;
+  }
+
+  .mode-button small {
+    display: none;
   }
 }
 
