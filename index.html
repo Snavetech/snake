@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#18241d" />
+    <meta
+      name="description"
+      content="A fast, responsive take on the classic Snake arcade game."
+    />
+    <title>Snake Field</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="game.js" defer></script>
+  </head>
+  <body>
+    <main class="game-shell">
+      <header class="topbar">
+        <div class="brand" aria-label="Snake Field">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 44 44" role="presentation">
+              <path d="M11 12h18v8H17v7h16v11H20v-5h8v-2H12V16h12v-2H11z" />
+              <rect x="29" y="12" width="4" height="4" />
+            </svg>
+          </span>
+          <span class="brand-name">Snake Field</span>
+        </div>
+
+        <div class="run-label" aria-hidden="true">
+          <span class="signal-dot"></span>
+          Field run / 01
+        </div>
+      </header>
+
+      <div class="game-layout">
+        <aside class="info-panel">
+          <div>
+            <p class="eyebrow">Classic rules. Sharper reflexes.</p>
+            <h1>Grow.<br /><em>Don't fold.</em></h1>
+            <p class="intro">
+              Collect every bite, fill the field, and keep your tail out of
+              trouble. The pace climbs as you do.
+            </p>
+          </div>
+
+          <dl class="scoreboard" aria-label="Current game statistics">
+            <div class="score-block score-block--primary">
+              <dt>Score</dt>
+              <dd id="score" aria-live="polite">000</dd>
+            </div>
+            <div class="score-block">
+              <dt>Best</dt>
+              <dd id="bestScore">000</dd>
+            </div>
+            <div class="score-block">
+              <dt>Level</dt>
+              <dd id="level">01</dd>
+            </div>
+          </dl>
+
+          <div class="panel-actions">
+            <button class="button button--primary" id="actionButton" type="button">
+              Start run
+              <span aria-hidden="true">↗</span>
+            </button>
+            <button class="button button--quiet" id="pauseButton" type="button" disabled>
+              Pause
+            </button>
+          </div>
+
+          <div class="control-note">
+            <span class="key-cluster" aria-hidden="true">
+              <kbd>W</kbd>
+              <kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
+            </span>
+            <p><strong>Steer the line</strong><br />Arrow keys or WASD</p>
+          </div>
+        </aside>
+
+        <section class="board-panel" aria-label="Snake game board">
+          <div class="board-meta">
+            <p><span>Status</span><strong id="statusText" aria-live="polite">Ready</strong></p>
+            <p><span>Grid</span><strong>20 × 20</strong></p>
+          </div>
+
+          <div class="canvas-wrap" id="canvasWrap">
+            <canvas
+              id="gameCanvas"
+              width="600"
+              height="600"
+              tabindex="0"
+              aria-label="Snake game. Use arrow keys or WASD to steer."
+            >
+              Your browser does not support the canvas element.
+            </canvas>
+
+            <div class="game-overlay" id="gameOverlay">
+              <p class="overlay-tag" id="overlayTag">Field notes / 001</p>
+              <h2 id="overlayTitle">Take the field.</h2>
+              <p id="overlayMessage">
+                Grab the orange bites. Avoid the border and your own trail.
+              </p>
+              <span class="space-hint">
+                Press <kbd>Space</kbd> to <span id="hintAction">start</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="touch-controls" aria-label="Touch direction controls">
+            <button
+              class="touch-button touch-button--up"
+              type="button"
+              data-direction="up"
+              aria-label="Move up"
+            >
+              ↑
+            </button>
+            <button
+              class="touch-button touch-button--left"
+              type="button"
+              data-direction="left"
+              aria-label="Move left"
+            >
+              ←
+            </button>
+            <button
+              class="touch-button touch-button--down"
+              type="button"
+              data-direction="down"
+              aria-label="Move down"
+            >
+              ↓
+            </button>
+            <button
+              class="touch-button touch-button--right"
+              type="button"
+              data-direction="right"
+              aria-label="Move right"
+            >
+              →
+            </button>
+          </div>
+
+          <p class="board-footer">
+            <span>Pause: <kbd>P</kbd> / <kbd>Space</kbd></span>
+            <span>Restart: <kbd>R</kbd></span>
+          </p>
+        </section>
+      </div>
+    </main>
+
+    <noscript>This game needs JavaScript enabled to run.</noscript>
+  </body>
+</html>
