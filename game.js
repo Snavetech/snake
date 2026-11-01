@@ -125,6 +125,8 @@ const actionButton = document.querySelector("#actionButton");
 const pauseButton = document.querySelector("#pauseButton");
 const soundButton = document.querySelector("#soundButton");
 const soundLabel = document.querySelector("#soundLabel");
+const mobileSoundButton = document.querySelector("#mobileSoundButton");
+const mobileSoundLabel = document.querySelector("#mobileSoundLabel");
 const overlay = document.querySelector("#gameOverlay");
 const overlayTag = document.querySelector("#overlayTag");
 const overlayTitle = document.querySelector("#overlayTitle");
@@ -315,6 +317,12 @@ function updateSoundControl() {
   soundButton.setAttribute("aria-pressed", String(soundEnabled));
   soundButton.setAttribute("aria-label", soundEnabled ? "Turn sound off" : "Turn sound on");
   soundLabel.textContent = soundEnabled ? "SFX on" : "SFX off";
+  mobileSoundButton.setAttribute("aria-pressed", String(soundEnabled));
+  mobileSoundButton.setAttribute(
+    "aria-label",
+    soundEnabled ? "Turn sound off" : "Turn sound on",
+  );
+  mobileSoundLabel.textContent = soundEnabled ? "Sound on" : "Sound off";
 }
 
 function toggleSound() {
@@ -735,6 +743,7 @@ function updateInterface(reason) {
   const isActive =
     gameState === GAME_STATES.RUNNING || gameState === GAME_STATES.PAUSED;
 
+  document.body.dataset.state = gameState;
   updateModeInterface();
   pauseButton.disabled = !isActive;
   pauseButton.textContent = gameState === GAME_STATES.PAUSED ? "Resume" : "Pause";
@@ -1172,6 +1181,7 @@ function handleSwipeEnd(event) {
 actionButton.addEventListener("click", handlePrimaryAction);
 pauseButton.addEventListener("click", togglePause);
 soundButton.addEventListener("click", toggleSound);
+mobileSoundButton.addEventListener("click", toggleSound);
 
 overlay.addEventListener("click", () => {
   if (gameState === GAME_STATES.PAUSED) {
