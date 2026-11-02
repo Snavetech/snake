@@ -200,10 +200,10 @@ button {
 
 .info-panel {
   min-width: 0;
-  padding: clamp(30px, 4vw, 54px);
+  padding: clamp(26px, 3vw, 44px);
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: clamp(18px, 2vw, 26px);
   border-right: 2px solid var(--ink);
 }
 
@@ -239,6 +239,7 @@ h1 em {
 }
 
 .mode-picker,
+.speed-picker,
 .level-progress {
   display: grid;
   gap: 8px;
@@ -263,6 +264,12 @@ h1 em {
 
 .section-heading span:first-child {
   color: var(--ink);
+}
+
+.section-heading strong {
+  color: var(--ink);
+  font-weight: 700;
+  letter-spacing: 0;
 }
 
 .mode-options {
@@ -325,6 +332,43 @@ h1 em {
   color: var(--muted);
   font-size: 0.68rem;
   line-height: 1.45;
+}
+
+.speed-options {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.speed-button {
+  min-width: 0;
+  min-height: 34px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.32);
+  font-family: "Courier New", monospace;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: color 140ms ease, background 140ms ease, border-color 140ms ease;
+}
+
+.speed-button:hover:not(:disabled, .is-active) {
+  color: var(--ink);
+  background: rgba(21, 32, 25, 0.07);
+}
+
+.speed-button.is-active {
+  border-color: var(--ink);
+  color: var(--white);
+  background: var(--ink);
+}
+
+.speed-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .scoreboard {
@@ -439,6 +483,7 @@ body[data-mode="challenge"] .control-note {
 
 .button:focus-visible,
 .mode-button:focus-visible,
+.speed-button:focus-visible,
 .sound-toggle:focus-visible,
 .touch-button:focus-visible,
 #gameCanvas:focus-visible {
@@ -786,6 +831,7 @@ noscript {
   }
 
   .mode-picker,
+  .speed-picker,
   .level-progress {
     gap: 5px;
   }
@@ -799,6 +845,15 @@ noscript {
   .mode-options {
     padding: 3px;
     gap: 3px;
+  }
+
+  .speed-options {
+    gap: 3px;
+  }
+
+  .speed-button {
+    min-height: 27px;
+    font-size: 0.62rem;
   }
 
   .mode-button {
@@ -872,10 +927,9 @@ noscript {
   }
 }
 
-@media (min-width: 881px) and (min-height: 560px) and (max-height: 760px) {
+@media (min-width: 881px) and (max-height: 950px) {
   .control-note {
-    padding-top: 12px;
-    display: flex;
+    display: none;
   }
 }
 
@@ -924,7 +978,7 @@ noscript {
   }
 
   body {
-    --mobile-reserved-space: 380px;
+    --mobile-reserved-space: 423px;
     padding: 0;
     display: block;
     color: var(--white);
@@ -937,7 +991,7 @@ noscript {
   }
 
   body[data-mode="challenge"] {
-    --mobile-reserved-space: 412px;
+    --mobile-reserved-space: 455px;
   }
 
   body[data-mode="challenge"][data-state="running"],
@@ -1062,8 +1116,19 @@ noscript {
     background: var(--ink-soft);
   }
 
+  .speed-picker {
+    order: 1;
+    padding: 0 10px 7px;
+    display: grid;
+    flex: 0 0 auto;
+    background: var(--ink-soft);
+  }
+
   body[data-state="running"] .mode-picker,
+  body[data-state="running"] .speed-picker,
   body[data-state="paused"] .mode-picker,
+  body[data-state="paused"] .speed-picker,
+  body[data-state="level-up"] .speed-picker,
   body[data-state="level-up"] .mode-picker {
     display: none;
   }
@@ -1098,6 +1163,45 @@ noscript {
 
   .mode-button span {
     font-size: 0.62rem;
+  }
+
+  .speed-options {
+    padding: 3px;
+    grid-template-columns: auto repeat(5, minmax(0, 1fr));
+    gap: 4px;
+    border: 1px solid rgba(249, 251, 245, 0.16);
+    border-radius: 10px;
+    background: #101914;
+  }
+
+  .speed-options::before {
+    content: "Speed";
+    padding: 0 5px;
+    align-self: center;
+    color: #9aa79e;
+    font-family: "Courier New", monospace;
+    font-size: 0.56rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .speed-button {
+    min-height: 30px;
+    border: 0;
+    color: #a7b2aa;
+    background: transparent;
+    font-size: 0.67rem;
+  }
+
+  .speed-button:hover:not(:disabled, .is-active) {
+    color: var(--white);
+    background: rgba(249, 251, 245, 0.07);
+  }
+
+  .speed-button.is-active {
+    color: var(--white);
+    background: var(--orange);
   }
 
   .level-progress {

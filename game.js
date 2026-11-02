@@ -2,14 +2,15 @@
 
 const GRID_SIZE = 20;
 const STARTING_LENGTH = 4;
-const BASE_MOVE_INTERVAL = 150;
 const MIN_MOVE_INTERVAL = 68;
+const LEVEL_SPEED_INCREASE = 12;
 const LEVEL_STEP = 5;
 const BONUS_TRIGGER = 7;
 const LEGACY_BEST_SCORE_KEY = "snake-field-best";
 const BEST_SCORES_KEY = "snake-field-best-scores";
 const MODE_KEY = "snake-field-mode";
 const SOUND_KEY = "snake-field-sound";
+const SPEED_KEY = "snake-field-starting-speed";
 
 const GAME_STATES = Object.freeze({
   IDLE: "idle",
@@ -44,6 +45,14 @@ const MODE_DETAILS = Object.freeze({
 const FOOD_TYPES = Object.freeze({
   REGULAR: "regular",
   BONUS: "bonus",
+});
+
+const STARTING_SPEEDS = Object.freeze({
+  1: { label: "Slowest", interval: 250 },
+  2: { label: "Easy", interval: 220 },
+  3: { label: "Normal", interval: 190 },
+  4: { label: "Quick", interval: 160 },
+  5: { label: "Fastest", interval: 135 },
 });
 
 const DIRECTIONS = Object.freeze({
@@ -136,6 +145,8 @@ const touchButtons = document.querySelectorAll("[data-direction]");
 const modeButtons = document.querySelectorAll("[data-mode]");
 const modeDescription = document.querySelector("#modeDescription");
 const boardMode = document.querySelector("#boardMode");
+const speedButtons = document.querySelectorAll("[data-speed]");
+const speedLabel = document.querySelector("#speedLabel");
 const levelProgress = document.querySelector("#levelProgress");
 const challengeLevelName = document.querySelector("#challengeLevelName");
 const progressText = document.querySelector("#progressText");
@@ -151,6 +162,7 @@ let score = 0;
 let currentMode = readGameMode();
 let bestScores = readBestScores();
 let soundEnabled = readSoundPreference();
+let startingSpeedLevel = readStartingSpeed();
 let audioContext = null;
 let level = 1;
 let foodCount = 0;
@@ -239,6 +251,23 @@ function saveSoundPreference() {
     localStorage.setItem(SOUND_KEY, String(soundEnabled));
   } catch {
     // Sound remains available for the current session without storage.
+  }
+}
+
+function readStartingSpeed() {
+  try {
+    const storedLevel = Number.parseInt(localStorage.getItem(SPEED_KEY) || "1", 10);
+    return STARTING_SPEEDS[storedLevel] ? storedLevel : 1;
+  } catch {
+    return 1;
+  }
+}
+
+function saveStartingSpeed() {
+  try {
+    localStorage.setItem(SPEED_KEY, String(startingSpeedLevel));
+  } catch {
+    // The selected speed remains active for the current session.
   }
 }
 
@@ -500,6 +529,21 @@ function selectGameMode(mode) {
   playGameSound("mode");
 }
 
+function selectStartingSpeed(value) {
+  const nextLevel = Number.parseInt(value, 10);
+  const isRunActive =
+    gameState === GAME_STATES.RUNNING || gameState === GAME_STATES.PAUSED;
+
+  if (!STARTING_SPEEDS[nextLevel] || nextLevel === startingSpeedLevel || isRunActive) {
+    return;
+  }
+
+  startingSpeedLevel = nextLevel;
+  saveStartingSpeed();
+  updateSpeedInterface();
+  playGameSound("mode");
+}
+
 function handlePrimaryAction() {
   if (gameState === GAME_STATES.LEVEL_UP) {
     startNextChallengeLevel();
@@ -602,7 +646,11 @@ function queueDirection(directionName) {
 }
 
 function getMoveInterval() {
-  return Math.max(MIN_MOVE_INTERVAL, BASE_MOVE_INTERVAL - (level - 1) * 10);
+  const startingInterval = STARTING_SPEEDS[startingSpeedLevel].interval;
+  return Math.max(
+    MIN_MOVE_INTERVAL,
+    startingInterval - (level - 1) * LEVEL_SPEED_INCREASE,
+  );
 }
 
 function moveSnake() {
@@ -739,12 +787,29 @@ function updateModeInterface() {
   updateChallengeProgress();
 }
 
+function updateSpeedInterface() {
+  const details = STARTING_SPEEDS[startingSpeedLevel];
+  const isRunActive =
+    gameState === GAME_STATES.RUNNING || gameState === GAME_STATES.PAUSED;
+
+  document.body.dataset.speed = String(startingSpeedLevel);
+  speedLabel.textContent = `Level ${startingSpeedLevel} / ${details.label}`;
+
+  speedButtons.forEach((button) => {
+    const isActive = Number.parseInt(button.dataset.speed, 10) === startingSpeedLevel;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+    button.disabled = isRunActive;
+  });
+}
+
 function updateInterface(reason) {
   const isActive =
     gameState === GAME_STATES.RUNNING || gameState === GAME_STATES.PAUSED;
 
   document.body.dataset.state = gameState;
   updateModeInterface();
+  updateSpeedInterface();
   pauseButton.disabled = !isActive;
   pauseButton.textContent = gameState === GAME_STATES.PAUSED ? "Resume" : "Pause";
   overlay.classList.toggle("is-hidden", gameState === GAME_STATES.RUNNING);
@@ -1195,6 +1260,10 @@ overlay.addEventListener("click", () => {
 
 modeButtons.forEach((button) => {
   button.addEventListener("click", () => selectGameMode(button.dataset.mode));
+});
+
+speedButtons.forEach((button) => {
+  button.addEventListener("click", () => selectStartingSpeed(button.dataset.speed));
 });
 
 touchButtons.forEach((button) => {

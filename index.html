@@ -95,6 +95,60 @@
             </p>
           </div>
 
+          <div class="speed-picker">
+            <div class="section-heading">
+              <span>Starting speed</span>
+              <strong id="speedLabel">Level 1 / Slowest</strong>
+            </div>
+            <div class="speed-options" role="group" aria-label="Starting speed level">
+              <button
+                class="speed-button is-active"
+                type="button"
+                data-speed="1"
+                aria-label="Starting speed level 1, slowest"
+                aria-pressed="true"
+              >
+                1
+              </button>
+              <button
+                class="speed-button"
+                type="button"
+                data-speed="2"
+                aria-label="Starting speed level 2, easy"
+                aria-pressed="false"
+              >
+                2
+              </button>
+              <button
+                class="speed-button"
+                type="button"
+                data-speed="3"
+                aria-label="Starting speed level 3, normal"
+                aria-pressed="false"
+              >
+                3
+              </button>
+              <button
+                class="speed-button"
+                type="button"
+                data-speed="4"
+                aria-label="Starting speed level 4, quick"
+                aria-pressed="false"
+              >
+                4
+              </button>
+              <button
+                class="speed-button"
+                type="button"
+                data-speed="5"
+                aria-label="Starting speed level 5, fastest"
+                aria-pressed="false"
+              >
+                5
+              </button>
+            </div>
+          </div>
+
           <dl class="scoreboard" aria-label="Current game statistics">
             <div class="score-block score-block--primary">
               <dt>Score</dt>
